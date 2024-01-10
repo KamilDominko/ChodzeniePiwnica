@@ -1,3 +1,11 @@
+# Moje rzeczy -_-
+.idea/
+__pycache__/
+temp.py
+tempik.py
+/res/graphic/old
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
