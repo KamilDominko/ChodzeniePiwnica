@@ -25,23 +25,8 @@ class Player:
         self.image = self.animations[self.action][self.animation_index]
         self.rect = self.image.get_rect(center=(x, y))
 
-    def _load_animations(self, name):
-        """Tworzy, a następnie zwraca słownik z nazwami animacji jako klucze i
-        tablice obrazów animacji jako wartości."""
-        _animation_types = ["idle", "run"]
-        animations = {}
-        for type in _animation_types:
-            animations[type] = []
-            _path = f"assets/images/characters/{name}/{type}"
-            for i in range(len(os.listdir(_path))):
-                img = pg.image.load(f"{_path}/{i}.png").convert_alpha()
-                width = img.get_width()
-                height = img.get_height()
-                img = pg.transform.scale(img, (width * SCALE, height * SCALE))
-                animations[type].append(img)
-        return animations
-
     def _update_animation(self):
+        """Aktualizuje obraz bytu oraz indeks animacji."""
         _animation_cooldown = 120
         self.image = self.animations[self.action][self.animation_index]
         # sprawdź, czy sprite nie powinien zostać przekręcony w LEWO
@@ -52,6 +37,34 @@ class Player:
             self.animation_counter = pg.time.get_ticks()
         if self.animation_index >= len(self.animations[self.action]):
             self.animation_index = 0
+
+    def _move(self):
+        dx, dy = 0, 0
+        if self.move_up:
+            dy += -self.speed
+        if self.move_down:
+            dy += self.speed
+        if self.move_left:
+            dx += -self.speed
+        if self.move_right:
+            dx += self.speed
+        # zmień akcje z idle na run, jeżeli gracz się porusza
+        if dx != 0 or dy != 0:
+            self.action = "run"
+        else:
+            self.action = "idle"
+        # przekręć gracza, jeżeli idzie w LEWO
+        if dx < 0:
+            self.flip = True
+        elif dx > 0:
+            self.flip = False
+        # oblicz prędkość gracza, jeżeli porusza się w dwóch kierunkach naraz
+        if dx != 0 and dy != 0:
+            dx = dx * (math.sqrt(2) / 2)
+            dy = dy * (math.sqrt(2) / 2)
+        # aktualizuj pozycje gracza
+        self.rect.x += dx
+        self.rect.y += dy
 
     def input(self, event):
         """Funkcja sprawdza input z klawiatury i myszy dla gracza."""
@@ -84,34 +97,6 @@ class Player:
                 pass
             if event.button == 3:  # PPM
                 pass
-
-    def _move(self):
-        dx, dy = 0, 0
-        if self.move_up:
-            dy += -self.speed
-        if self.move_down:
-            dy += self.speed
-        if self.move_left:
-            dx += -self.speed
-        if self.move_right:
-            dx += self.speed
-        # zmień akcje z idle na run, jeżeli gracz się porusza
-        if dx != 0 or dy != 0:
-            self.action = "run"
-        else:
-            self.action = "idle"
-        # przekręć gracza, jeżeli idzie w LEWO
-        if dx < 0:
-            self.flip = True
-        elif dx > 0:
-            self.flip = False
-        # oblicz prędkość gracza, jeżeli porusza się w dwóch kierunkach naraz
-        if dx != 0 and dy != 0:
-            dx = dx * (math.sqrt(2) / 2)
-            dy = dy * (math.sqrt(2) / 2)
-        # aktualizuj pozycje gracza
-        self.rect.x += dx
-        self.rect.y += dy
 
     def update(self):
         self._move()

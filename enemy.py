@@ -23,6 +23,7 @@ class Enemy:
         self.rect = self.image.get_rect(center=(x, y))
 
     def _update_animation(self):
+        """Aktualizuje obraz bytu oraz indeks animacji."""
         _animation_cooldown = 120
         self.image = self.animations[self.action][self.animation_index]
         # sprawdź, czy sprite nie powinien zostać przekręcony w LEWO
