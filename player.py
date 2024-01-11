@@ -17,6 +17,8 @@ class Player:
         self.flip = False  # Domyślnie sprite skierowany jest w PRAWO
 
         self.speed = 5
+        self.health = 16
+        self.score = 0
         self.bow = Bow()
 
         self.animation_index = 0
@@ -99,6 +101,13 @@ class Player:
                 pass
             if event.button == 3:  # PPM
                 pass
+
+    def heal(self):
+        # self.health += 1
+        # if self.health > 16:
+        #     self.health = 16
+        if self.health < 16:
+            self.health += 1
 
     def update(self, enemies):
         self._move()

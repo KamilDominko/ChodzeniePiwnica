@@ -6,16 +6,14 @@ class SpriteHandler:
         self.player = None
         self.enemies = pg.sprite.Group()
         self.arrows = pg.sprite.Group()
+        self.items = pg.sprite.Group()
         self.text = pg.sprite.Group()
 
     def update(self):
-        # player
         self.player.update(self.enemies)
-        # enemies
         self.enemies.update()
-        # arrows
         self.arrows.update(self.enemies, self.text)
-        # text
+        self.items.update(self.player)
         self.text.update()
 
     def display(self, screen):
@@ -28,5 +26,9 @@ class SpriteHandler:
         if self.arrows:
             for arrow in self.arrows:
                 arrow.display(screen)
+        # items
+        self.items.draw(screen)
+        # for item in self.items:
+        #     item.display(screen)
         # text
         self.text.draw(screen)
