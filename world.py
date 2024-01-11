@@ -46,6 +46,6 @@ class Word:
                 if tile >= 0:
                     self.map_tiles.append(tile_data)
 
-    def display(self, screen):
+    def display(self, screen, offset):
         for tile in self.map_tiles:
-            screen.blit(tile[0], tile[1])
+            screen.blit(tile[0], tile[1].topleft-offset)

@@ -63,5 +63,6 @@ class Item(pg.sprite.Sprite):
         self._update_animation()
         self._collision(player)
 
-    def display(self, screen):
-        pg.draw.rect(screen, RED, self.rect, 1)
+    def display(self, screen, offset):
+        screen.blit(self.image, self.rect.topleft-offset)
+        # pg.draw.rect(screen, RED, self.rect, 1)

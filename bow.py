@@ -13,19 +13,20 @@ class Bow:
         self.image = pg.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
 
-    def shoot(self, x, y, arrows):
-        arrow = Arrow(self.angle, x, y)
+    def shoot(self, x, y, arrows, offset):
+        arrow = Arrow(self.angle, x, y, offset)
         arrows.add(arrow)
 
-    def update(self, player, enemies):
+    def update(self, player, offset):
         self.rect.center = player.rect.center
-        pos = pg.mouse.get_pos()
+        pos = pg.mouse.get_pos() + offset
         x_dist = pos[0] - self.rect.centerx
         y_dist = -(pos[1] - self.rect.centery)  # -ve, Y increase down screen
         self.angle = math.degrees(math.atan2(y_dist, x_dist))
 
-    def display(self, screen):
+    def display(self, screen, offset):
         self.image = pg.transform.rotate(self.original_image, self.angle)
         rect = ((self.rect.centerx - int(self.image.get_width() / 2)),
                 self.rect.centery - int(self.image.get_height() / 3))
+        rect -= offset
         screen.blit(self.image, rect)

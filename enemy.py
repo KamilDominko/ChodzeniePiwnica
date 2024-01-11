@@ -75,6 +75,6 @@ class Enemy(pg.sprite.Sprite):
         self._move()
         self._update_animation()
 
-    def display(self, screen):
-        screen.blit(self.image, self.rect)
+    def display(self, screen, offset):
+        screen.blit(self.image, self.rect.topleft - offset)
         # pg.draw.rect(screen, RED, self.rect, 1)

@@ -11,15 +11,15 @@ class Arrow(pg.sprite.Sprite):
     image = e.scale_image(
         pg.image.load("assets/images/weapons/arrow.png"), WEAPON_SCALE)
 
-    def __init__(self, angle, x, y):
+    def __init__(self, angle, x, y, offset):
         super().__init__()
         self.image = pg.transform.rotate(Arrow.image, angle - 90)
         self.rect = self.image.get_rect(center=(x, y))
         self.x, self.y = x, y
-        self.dx, self.dy = self._set_dx_dy()
+        self.dx, self.dy = self._set_dx_dy(offset)
 
-    def _set_dx_dy(self):
-        mosX, mosY = pg.mouse.get_pos()
+    def _set_dx_dy(self, offset):
+        mosX, mosY = pg.mouse.get_pos() + offset
         _angle = math.atan2(mosY - self.y, mosX - self.x)
         dx = math.cos(_angle) * ARROW_SPEED
         dy = math.sin(_angle) * ARROW_SPEED
@@ -53,6 +53,6 @@ class Arrow(pg.sprite.Sprite):
         self._collide_screen_borders()
         self._collide_enemies(enemies, text)
 
-    def display(self, screen):
-        screen.blit(self.image, self.rect)
-        pg.draw.rect(screen, RED, self.rect, 1)
+    def display(self, screen, offset):
+        screen.blit(self.image, self.rect.topleft - offset)
+        # pg.draw.rect(screen, RED, self.rect, 1)

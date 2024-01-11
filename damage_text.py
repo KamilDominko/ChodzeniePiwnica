@@ -13,3 +13,6 @@ class DamageText(pg.sprite.Sprite):
         self.rect.y -= 1
         if pg.time.get_ticks() - self.counter > 500:
             self.kill()
+
+    def display(self, screen, offset):
+        screen.blit(self.image, self.rect.topleft - offset)

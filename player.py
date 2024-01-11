@@ -10,6 +10,7 @@ from bow import Bow
 class Player:
     def __init__(self, game, x, y):
         self.game = game
+        self.offset = game.offset
         self.move_up = False
         self.move_down = False
         self.move_left = False
@@ -98,7 +99,7 @@ class Player:
             if event.button == 1:  # Lewy Przycisk Myszy LPM
                 self.bow.shoot(self.rect.centerx,
                                self.rect.centery + self.rect.height // 4,
-                               self.game.sprite_handler.arrows)
+                               self.game.sprite_handler.arrows, self.offset)
             if event.button == 3:  # Prawy Przycisk Myszy PPM
                 pass
         if event.type == pg.MOUSEBUTTONUP:  # Zwolnienie klawiszy myszki
@@ -107,22 +108,16 @@ class Player:
             if event.button == 3:  # PPM
                 pass
 
-    # def heal(self):
-    #     # self.health += 1
-    #     # if self.health > 16:
-    #     #     self.health = 16
-    #     if self.health < 16:
-    #         self.health += 1
-
-    def update(self, enemies):
+    def update(self, offset):
         self._move()
         self._update_animation()
-        self.bow.update(self, enemies)
+        self.bow.update(self, offset)
 
-    def display(self, screen):
+    def display(self, screen, offset):
         # nie wiem kurwa co tu się stało, podzielić TILE_SIZE na 3 i działa
         rect = (self.rect.x, self.rect.y - self.image.get_rect().w +
-                 TILE_SIZE/3)
+                TILE_SIZE / 3)
+        rect -= offset
         screen.blit(self.image, rect)
-        self.bow.display(screen)
-        pg.draw.rect(screen, RED, self.rect, 1)
+        self.bow.display(screen, offset)
+        # pg.draw.rect(screen, RED, self.rect, 1)
