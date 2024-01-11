@@ -53,8 +53,9 @@ class Item(pg.sprite.Sprite):
                 player.score += 1
                 self.kill()
             elif self.item_type == 1: # mikstura życia
-                player.heal()
-                self.kill()
+                if player.health < 16:
+                    player.health += 1
+                    self.kill()
 
 
     def update(self, player):

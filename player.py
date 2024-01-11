@@ -102,12 +102,12 @@ class Player:
             if event.button == 3:  # PPM
                 pass
 
-    def heal(self):
-        # self.health += 1
-        # if self.health > 16:
-        #     self.health = 16
-        if self.health < 16:
-            self.health += 1
+    # def heal(self):
+    #     # self.health += 1
+    #     # if self.health > 16:
+    #     #     self.health = 16
+    #     if self.health < 16:
+    #         self.health += 1
 
     def update(self, enemies):
         self._move()
