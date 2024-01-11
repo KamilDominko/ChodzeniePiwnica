@@ -117,7 +117,27 @@ class Player:
         # nie wiem kurwa co tu się stało, podzielić TILE_SIZE na 3 i działa
         rect = (self.rect.x, self.rect.y - self.image.get_rect().w +
                 TILE_SIZE / 3)
+
+
+        # rect = self.image.get_rect(center=(self.rect.centerx,
+        #                                    self.rect.centery-self.image.get_rect().h//3))
         rect -= offset
         screen.blit(self.image, rect)
+
+        # img_rect = self.image.get_rect(center=self.rect.center)
+        # img_rect.topleft -= offset
+        # pg.draw.rect(screen, BLACK, img_rect, 2)
+        # screen.blit(self.image, img_rect.topleft)
+
         self.bow.display(screen, offset)
         # pg.draw.rect(screen, RED, self.rect, 1)
+
+        # rect = pg.Rect(self.rect.x - offset.x, self.rect.y - offset.y,
+        #                self.rect.w, self.rect.h)
+
+        # rect = pg.Rect(self.rect.x - offset.x, self.rect.y - offset.y,
+        #                self.rect.w, self.rect.h)
+        # pg.draw.rect(screen, RED, rect, 1)
+
+
+

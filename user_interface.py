@@ -4,8 +4,9 @@ from constants import *
 
 
 class UserInterface:
-    def __init__(self, player):
+    def __init__(self, player, level):
         self.player = player
+        self.level = level
         self.font = pg.font.Font("assets/fonts/AtariClassic.ttf", 60)
         self._load_images()
 
@@ -49,7 +50,13 @@ class UserInterface:
                                        centery=self.panel_rect.centery)
         screen.blit(self.coin, coin_rect)
 
+    def _draw_level(self, screen):
+        img = self.font.render(f"LEVEL: {self.level}", True, BLACK)
+        img_rect = img.get_rect(center=(SCREEN_WIDTH // 2, self.height // 2))
+        screen.blit(img, img_rect)
+
     def display(self, screen):
         self._draw_panel(screen)
         self._draw_hearths(screen)
+        self._draw_level(screen)
         self._draw_score(screen)

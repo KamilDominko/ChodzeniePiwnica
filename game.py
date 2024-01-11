@@ -18,21 +18,19 @@ class Game:
         self.clock = pg.time.Clock()
 
         self.offset = pg.math.Vector2()
+        self.sprite_handler = SpriteHandler(self.offset)
         self.level = 1
         self.player = Player(self, 200, 300)
-        self.world = Word()
+        self.sprite_handler.player = self.player
+
+        self.world = Word(self.sprite_handler)
         world_data = self.world.create_epmty_world_data()
         world_data = self.world.load_level_from_file(world_data, self.level)
         self.world.process_data(world_data)
 
+        self.interface = UserInterface(self.player, self.level)
 
-        self.sprite_handler = SpriteHandler(self.offset)
-        self.interface = UserInterface(self.player)
-
-        self.sprite_handler.player = self.player
         self.sprite_handler.enemies.add(Enemy(self, 'skeleton', 500, 500))
-        self.sprite_handler.items.add(Item(600, 400, 1))
-        self.sprite_handler.items.add(Item(700, 400, 0))
 
     def _update_offset(self):
         self.offset.x = self.player.rect.centerx - SCREEN_WIDTH // 2
@@ -57,6 +55,9 @@ class Game:
         self.sprite_handler.display(self.screen)
         self.interface.display(self.screen)
         # Odśwież okno.
+
+        # pg.draw.circle(self.screen, RED, (SCREEN_WIDTH//2, SCREEN_HEIGHT//2), 4)
+
         pg.display.update()
 
     def start(self):

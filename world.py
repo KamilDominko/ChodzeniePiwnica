@@ -2,12 +2,17 @@ import pygame as pg
 import csv
 from constants import *
 import engine as e
+from item import Item
+from enemy import Enemy
 
 
 class Word:
-    def __init__(self):
+    def __init__(self, sprite_handler):
+        self.sprite_handler = sprite_handler
         self.map_tiles = []
         self.tile_images = self._load_tile_images()
+        self.obstacle_tiles = []
+        self.exit_tile = None
 
     def create_epmty_world_data(self):
         world_data = []
@@ -43,9 +48,28 @@ class Word:
                 image_y = y * TILE_SIZE
                 image_rect.center = (image_x, image_y)
                 tile_data = [image, image_rect, image_x, image_y]
+                if tile == 7:  # ściana
+                    self.obstacle_tiles.append(tile_data)
+                elif tile == 8:  # drabina
+                    self.exit_tile = tile_data
+                elif tile == 9:  # moneta
+                    coin = Item(image_x, image_y, 0)
+                    self.sprite_handler.items.add(coin)
+                    tile_data[0] = self.tile_images[0]
+                    tile_data[1] = tile_data[0].get_rect(
+                        center=(image_x, image_y))
+                elif tile == 10:  # mikstura życia
+                    potion = Item(image_x, image_y, 1)
+                    self.sprite_handler.items.add(potion)
+                    tile_data[0] = self.tile_images[0]
+                elif tile == 11:  # gracz
+                    self.sprite_handler.player.rect.center = (image_x, image_y)
+                    tile_data[0] = self.tile_images[0]
+                    tile_data[1] = tile_data[0].get_rect(
+                        center=(image_x, image_y))
                 if tile >= 0:
                     self.map_tiles.append(tile_data)
 
     def display(self, screen, offset):
         for tile in self.map_tiles:
-            screen.blit(tile[0], tile[1].topleft-offset)
+            screen.blit(tile[0], tile[1].topleft - offset)
