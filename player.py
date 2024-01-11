@@ -9,6 +9,7 @@ from bow import Bow
 
 class Player:
     def __init__(self, game, x, y):
+        self.game = game
         self.move_up = False
         self.move_down = False
         self.move_left = False
@@ -89,7 +90,8 @@ class Player:
         if event.type == pg.MOUSEBUTTONDOWN:  # Wciśnięcie klawiszy myszki
             if event.button == 1:  # Lewy Przycisk Myszy LPM
                 self.bow.shoot(self.rect.centerx,
-                               self.rect.centery + self.rect.height // 4)
+                               self.rect.centery + self.rect.height // 4,
+                               self.game.sprite_handler.arrows)
             if event.button == 3:  # Prawy Przycisk Myszy PPM
                 pass
         if event.type == pg.MOUSEBUTTONUP:  # Zwolnienie klawiszy myszki
@@ -98,10 +100,10 @@ class Player:
             if event.button == 3:  # PPM
                 pass
 
-    def update(self):
+    def update(self, enemies):
         self._move()
         self._update_animation()
-        self.bow.update(self)
+        self.bow.update(self, enemies)
 
     def display(self, screen):
         screen.blit(self.image, self.rect)

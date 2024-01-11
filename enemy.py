@@ -5,8 +5,9 @@ from constants import *
 import engine as e
 
 
-class Enemy:
+class Enemy(pg.sprite.Sprite):
     def __init__(self, game, name, x, y):
+        super().__init__()
         self.move_up = False
         self.move_down = False
         self.move_left = False
@@ -14,6 +15,7 @@ class Enemy:
         self.flip = False  # Domyślnie sprite skierowany jest w PRAWO
 
         self.speed = 3
+        self.health = 100
 
         self.animation_index = 0
         self.animation_counter = pg.time.get_ticks()
@@ -62,6 +64,12 @@ class Enemy:
         # aktualizuj pozycje
         self.rect.x += dx
         self.rect.y += dy
+
+    def take_damage(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            self.health = 0
+            self.kill()
 
     def update(self):
         self._move()
