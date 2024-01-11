@@ -26,7 +26,9 @@ class Player:
         self.animations = e.load_animations("assets/images/characters", "elf")
         self.action = "idle"
         self.image = self.animations[self.action][self.animation_index]
-        self.rect = self.image.get_rect(center=(x, y))
+
+        self.rect = self.image.get_rect(center=(x, y), width=TILE_SIZE,
+                                        height=TILE_SIZE)
 
     def _update_animation(self):
         """Aktualizuje obraz bytu oraz indeks animacji."""
@@ -68,6 +70,9 @@ class Player:
         # aktualizuj pozycje gracza
         self.rect.x += dx
         self.rect.y += dy
+
+    # def update_scroll(self):
+    #     if self.rect
 
     def input(self, event):
         """Funkcja sprawdza input z klawiatury i myszy dla gracza."""
@@ -115,6 +120,9 @@ class Player:
         self.bow.update(self, enemies)
 
     def display(self, screen):
-        screen.blit(self.image, self.rect)
+        # nie wiem kurwa co tu się stało, podzielić TILE_SIZE na 3 i działa
+        rect = (self.rect.x, self.rect.y - self.image.get_rect().w +
+                 TILE_SIZE/3)
+        screen.blit(self.image, rect)
         self.bow.display(screen)
         pg.draw.rect(screen, RED, self.rect, 1)

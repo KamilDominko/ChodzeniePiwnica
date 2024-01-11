@@ -77,3 +77,4 @@ class Enemy(pg.sprite.Sprite):
 
     def display(self, screen):
         screen.blit(self.image, self.rect)
+        # pg.draw.rect(screen, RED, self.rect, 1)

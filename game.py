@@ -6,6 +6,7 @@ from bow import Bow
 from sprite_handler import SpriteHandler
 from user_interface import UserInterface
 from item import Item
+from world import Word
 
 pg.init()
 
@@ -13,9 +14,17 @@ pg.init()
 class Game:
     def __init__(self):
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.player = Player(self, 200, 300)
         self.running = True
         self.clock = pg.time.Clock()
+
+        self.level = 1
+        self.player = Player(self, 200, 300)
+        self.world = Word()
+        world_data = self.world.create_epmty_world_data()
+        world_data = self.world.load_level_from_file(world_data, self.level)
+        self.world.process_data(world_data)
+
+        self.screen_scroll = [0, 0]
 
         self.sprite_handler = SpriteHandler()
         self.interface = UserInterface(self.player)
@@ -39,6 +48,7 @@ class Game:
 
     def _update_screen(self):
         self.screen.fill(BG)
+        self.world.display(self.screen)
         self.sprite_handler.display(self.screen)
         self.interface.display(self.screen)
         # Odśwież okno.

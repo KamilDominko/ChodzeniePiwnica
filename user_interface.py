@@ -13,15 +13,16 @@ class UserInterface:
 
     def _load_images(self):
         self.hearth_full = e.scale_image(pg.image.load(
-            "assets/images/items/heart_full.png"), HEARTH_SCALE)
+            "assets/images/items/heart_full.png").convert_alpha(), HEARTH_SCALE)
         self.hearth_half = e.scale_image(pg.image.load(
-            "assets/images/items/heart_half.png"), HEARTH_SCALE)
+            "assets/images/items/heart_half.png").convert_alpha(), HEARTH_SCALE)
         self.hearth_empty = e.scale_image(pg.image.load(
-            "assets/images/items/heart_empty.png"), HEARTH_SCALE)
+            "assets/images/items/heart_empty.png").convert_alpha(),
+                                          HEARTH_SCALE)
         self.width = self.hearth_full.get_width()
         self.height = self.hearth_full.get_height()
         self.coin = e.scale_image(pg.image.load(
-            "assets/images/items/coin_f0.png"), 7)
+            "assets/images/items/coin_f0.png").convert_alpha(), 7)
 
     def _draw_panel(self, screen):
         pg.draw.rect(screen, PANEL, self.panel_rect)

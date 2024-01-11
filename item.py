@@ -30,11 +30,13 @@ class Item(pg.sprite.Sprite):
         aniamtion_list = []
         if item_type == 0:  # coin
             for i in range(4):
-                img = pg.image.load(f"assets/images/items/coin_f{i}.png")
+                img = pg.image.load(
+                    f"assets/images/items/coin_f{i}.png").convert_alpha()
                 img = e.scale_image(img, ITEM_SCALE)
                 aniamtion_list.append(img)
         elif item_type == 1:  # health potion
-            img = pg.image.load("assets/images/items/potion_red.png")
+            img = pg.image.load(
+                "assets/images/items/potion_red.png").convert_alpha()
             img = e.scale_image(img, POTION_SCALE)
             aniamtion_list.append(img)
         return aniamtion_list
@@ -49,19 +51,17 @@ class Item(pg.sprite.Sprite):
 
     def _collision(self, player):
         if self.rect.colliderect(player):
-            if self.item_type == 0: # moneta
+            if self.item_type == 0:  # moneta
                 player.score += 1
                 self.kill()
-            elif self.item_type == 1: # mikstura życia
+            elif self.item_type == 1:  # mikstura życia
                 if player.health < 16:
                     player.health += 1
                     self.kill()
 
-
     def update(self, player):
         self._update_animation()
         self._collision(player)
-
 
     def display(self, screen):
         pg.draw.rect(screen, RED, self.rect, 1)
