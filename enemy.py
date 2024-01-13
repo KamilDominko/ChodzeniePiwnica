@@ -82,7 +82,34 @@ class Enemy(pg.sprite.Sprite):
                 if dy < 0:
                     self.rect.top = obstacle[1].bottom
 
+    def _ai(self, player, obstacles):
+        clipped_line = ()
+        self.move_up = False
+        self.move_down = False
+        self.move_left = False
+        self.move_right = False
+        # sprawdź, czy gracz jest w zasięgu wzroku
+        line_of_sight = ((self.rect.centerx, self.rect.centery),
+                         (player.rect.centerx, player.rect.centery))
+        for obstacle in obstacles:
+            if obstacle[1].clipline(line_of_sight):
+                clipped_line = obstacle[1].clipline(line_of_sight)
 
+        x = (self.rect.centerx - player.rect.centerx) ** 2
+        y = (self.rect.centery - player.rect.centery) ** 2
+        dist = math.sqrt(x + y)
+        if not clipped_line and dist > self.rect.w // 2:
+            if self.rect.centerx > player.rect.centerx:
+                self.move_left = True
+            if self.rect.centerx < player.rect.centerx:
+                self.move_right = True
+            if self.rect.centery > player.rect.centery:
+                self.move_up = True
+            if self.rect.centery < player.rect.centery:
+                self.move_down = True
+        # zaatakuj gracza
+        if dist <= self.rect.w:
+            player.take_damage(self.damage)
 
     def take_damage(self, damage):
         self.health -= damage
@@ -91,6 +118,7 @@ class Enemy(pg.sprite.Sprite):
             self.kill()
 
     def update(self, obstacles, player):
+        self._ai(player, obstacles)
         self._move(obstacles)
         self._update_animation()
 
