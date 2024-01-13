@@ -22,6 +22,8 @@ class Player:
         self.score = 0
         self.bow = Bow()
 
+        self.last_hit = pg.time.get_ticks()
+
         self.animation_index = 0
         self.animation_counter = pg.time.get_ticks()
         self.animations = e.load_animations("assets/images/characters", "elf")
@@ -44,7 +46,7 @@ class Player:
         if self.animation_index >= len(self.animations[self.action]):
             self.animation_index = 0
 
-    def _move(self):
+    def _move(self, obstacles):
         dx, dy = 0, 0
         if self.move_up:
             dy += -self.speed
@@ -70,10 +72,21 @@ class Player:
             dy = dy * (math.sqrt(2) / 2)
         # aktualizuj pozycje gracza
         self.rect.x += dx
+        # sprawdź kolizję z przeszkodami w poziomie
+        for obstacle in obstacles:
+            if obstacle[1].colliderect(self.rect):
+                if dx > 0:
+                    self.rect.right = obstacle[1].left
+                if dx < 0:
+                    self.rect.left = obstacle[1].right
         self.rect.y += dy
-
-    # def update_scroll(self):
-    #     if self.rect
+        # sprawdź kolizję z przeszkodami w pionie
+        for obstacle in obstacles:
+            if obstacle[1].colliderect(self.rect):
+                if dy > 0:
+                    self.rect.bottom = obstacle[1].top
+                if dy < 0:
+                    self.rect.top = obstacle[1].bottom
 
     def input(self, event):
         """Funkcja sprawdza input z klawiatury i myszy dla gracza."""
@@ -108,8 +121,15 @@ class Player:
             if event.button == 3:  # PPM
                 pass
 
-    def update(self, offset):
-        self._move()
+    def take_damage(self, damage):
+        if pg.time.get_ticks() - self.last_hit > 500:
+            self.last_hit = pg.time.get_ticks()
+            self.health -= damage
+            if self.health <= 0:
+                self.health = 0
+
+    def update(self, offset, obstacles):
+        self._move(obstacles)
         self._update_animation()
         self.bow.update(self, offset)
 
@@ -117,7 +137,6 @@ class Player:
         # nie wiem kurwa co tu się stało, podzielić TILE_SIZE na 3 i działa
         rect = (self.rect.x, self.rect.y - self.image.get_rect().w +
                 TILE_SIZE / 3)
-
 
         # rect = self.image.get_rect(center=(self.rect.centerx,
         #                                    self.rect.centery-self.image.get_rect().h//3))
@@ -138,6 +157,3 @@ class Player:
         # rect = pg.Rect(self.rect.x - offset.x, self.rect.y - offset.y,
         #                self.rect.w, self.rect.h)
         # pg.draw.rect(screen, RED, rect, 1)
-
-
-

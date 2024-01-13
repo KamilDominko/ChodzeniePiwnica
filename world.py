@@ -49,7 +49,8 @@ class Word:
                 image_rect.center = (image_x, image_y)
                 tile_data = [image, image_rect, image_x, image_y]
                 if tile == 7:  # ściana
-                    self.obstacle_tiles.append(tile_data)
+                    self.sprite_handler.obstacles.append(tile_data)
+                    # self.obstacle_tiles.append(tile_data)
                 elif tile == 8:  # drabina
                     self.exit_tile = tile_data
                 elif tile == 9:  # moneta
@@ -67,6 +68,33 @@ class Word:
                     tile_data[0] = self.tile_images[0]
                     tile_data[1] = tile_data[0].get_rect(
                         center=(image_x, image_y))
+                elif tile == 12:
+                    enemy = Enemy("imp", image_x, image_y)
+                    self.sprite_handler.enemies.add(enemy)
+                    tile_data[0] = self.tile_images[0]
+                elif tile == 13:
+                    enemy = Enemy("skeleton", image_x, image_y)
+                    self.sprite_handler.enemies.add(enemy)
+                    tile_data[0] = self.tile_images[0]
+                elif tile == 14:
+                    enemy = Enemy("goblin", image_x, image_y)
+                    self.sprite_handler.enemies.add(enemy)
+                    tile_data[0] = self.tile_images[0]
+                elif tile == 15:
+                    enemy = Enemy("muddy", image_x, image_y)
+                    self.sprite_handler.enemies.add(enemy)
+                    tile_data[0] = self.tile_images[0]
+                elif tile == 16:
+                    enemy = Enemy("tiny_zombie", image_x, image_y)
+                    self.sprite_handler.enemies.add(enemy)
+                    tile_data[0] = self.tile_images[0]
+                elif tile == 17:
+                    enemy = Enemy("big_demon", image_x, image_y)
+                    self.sprite_handler.enemies.add(enemy)
+                    tile_data[0] = self.tile_images[0]
+                    tile_data[1] = tile_data[0].get_rect(
+                        center=(image_x, image_y))
+
                 if tile >= 0:
                     self.map_tiles.append(tile_data)
 

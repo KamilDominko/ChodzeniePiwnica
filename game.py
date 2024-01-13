@@ -30,8 +30,6 @@ class Game:
 
         self.interface = UserInterface(self.player, self.level)
 
-        self.sprite_handler.enemies.add(Enemy(self, 'skeleton', 500, 500))
-
     def _update_offset(self):
         self.offset.x = self.player.rect.centerx - SCREEN_WIDTH // 2
         self.offset.y = self.player.rect.centery - SCREEN_HEIGHT // 2

@@ -9,10 +9,11 @@ class SpriteHandler:
         self.arrows = pg.sprite.Group()
         self.items = pg.sprite.Group()
         self.text = pg.sprite.Group()
+        self.obstacles = []
 
     def update(self):
-        self.player.update(self.offset)
-        self.enemies.update()
+        self.player.update(self.offset, self.obstacles)
+        self.enemies.update(self.obstacles, self.player)
         self.arrows.update(self.enemies, self.text)
         self.items.update(self.player)
         self.text.update()

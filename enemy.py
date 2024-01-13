@@ -6,7 +6,7 @@ import engine as e
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, game, name, x, y):
+    def __init__(self, name, x, y):
         super().__init__()
         self.move_up = False
         self.move_down = False
@@ -16,6 +16,9 @@ class Enemy(pg.sprite.Sprite):
 
         self.speed = 3
         self.health = 100
+        self.damage = 1
+
+        self.last_hit = pg.time.get_ticks()
 
         self.animation_index = 0
         self.animation_counter = pg.time.get_ticks()
@@ -37,7 +40,7 @@ class Enemy(pg.sprite.Sprite):
         if self.animation_index >= len(self.animations[self.action]):
             self.animation_index = 0
 
-    def _move(self):
+    def _move(self, obstacles):
         dx, dy = 0, 0
         if self.move_up:
             dy += -self.speed
@@ -63,7 +66,23 @@ class Enemy(pg.sprite.Sprite):
             dy = dy * (math.sqrt(2) / 2)
         # aktualizuj pozycje
         self.rect.x += dx
+        # sprawdź kolizję z przeszkodami w poziomie
+        for obstacle in obstacles:
+            if obstacle[1].colliderect(self.rect):
+                if dx > 0:
+                    self.rect.right = obstacle[1].left
+                if dx < 0:
+                    self.rect.left = obstacle[1].right
         self.rect.y += dy
+        # sprawdź kolizję z przeszkodami w pionie
+        for obstacle in obstacles:
+            if obstacle[1].colliderect(self.rect):
+                if dy > 0:
+                    self.rect.bottom = obstacle[1].top
+                if dy < 0:
+                    self.rect.top = obstacle[1].bottom
+
+
 
     def take_damage(self, damage):
         self.health -= damage
@@ -71,8 +90,8 @@ class Enemy(pg.sprite.Sprite):
             self.health = 0
             self.kill()
 
-    def update(self):
-        self._move()
+    def update(self, obstacles, player):
+        self._move(obstacles)
         self._update_animation()
 
     def display(self, screen, offset):
